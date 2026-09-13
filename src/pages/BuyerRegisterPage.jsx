@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ShieldCheck, Upload, CheckCircle2 } from "lucide-react";
+import {
+  ShieldCheck,
+  Upload,
+  CheckCircle2,
+  Building2,
+  FileCheck2,
+  UserCheck,
+  LockKeyhole,
+} from "lucide-react";
 import Button from "../components/Button";
 import { registerBuyer } from "../services/api";
 import { setCurrentUser } from "../utils/auth";
@@ -12,54 +20,187 @@ const ORG_TYPES = [
   "Autonomous Body",
 ];
 
-function FileUploadField({ label, fileName, onChange }) {
+function TextField({
+  label,
+  value,
+  onChange,
+  type = "text",
+  required = true,
+  placeholder = "",
+}) {
   return (
     <div>
-      <label className="block text-xs font-medium text-ink-600 mb-1">
+      <label className="block text-[13px] font-semibold text-slate-700 mb-1.5">
         {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
       </label>
-      <label className="flex items-center gap-2 border border-dashed border-border rounded-badge px-3 py-2.5 text-sm text-ink-600 cursor-pointer hover:border-navy-900">
+
+      <input
+        type={type}
+        required={required}
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+        className="
+          w-full h-11
+          border border-slate-300
+          rounded-lg
+          px-3.5
+          text-sm text-slate-900
+          bg-white
+          placeholder:text-slate-400
+          transition-all duration-150
+          focus:outline-none
+          focus:border-blue-600
+          focus:ring-4
+          focus:ring-blue-100
+        "
+      />
+    </div>
+  );
+}
+
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+  required = true,
+}) {
+  return (
+    <div>
+      <label className="block text-[13px] font-semibold text-slate-700 mb-1.5">
+        {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
+      </label>
+
+      <select
+        value={value}
+        required={required}
+        onChange={(e) => onChange(e.target.value)}
+        className="
+          w-full h-11
+          border border-slate-300
+          rounded-lg
+          px-3.5
+          text-sm text-slate-900
+          bg-white
+          transition-all duration-150
+          focus:outline-none
+          focus:border-blue-600
+          focus:ring-4
+          focus:ring-blue-100
+        "
+      >
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+function FileUploadField({
+  label,
+  fileName,
+  onChange,
+  required = true,
+}) {
+  return (
+    <div>
+      <label className="block text-[13px] font-semibold text-slate-700 mb-1.5">
+        {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
+      </label>
+
+      <label
+        className="
+          flex items-center gap-3
+          min-h-12
+          border border-dashed border-slate-300
+          rounded-lg
+          px-3.5 py-2.5
+          text-sm
+          bg-slate-50
+          cursor-pointer
+          transition-all duration-150
+          hover:border-blue-500
+          hover:bg-blue-50
+        "
+      >
         {fileName ? (
           <>
-            <CheckCircle2 className="w-4 h-4 text-status-green shrink-0" />
-            <span className="text-ink-900">{fileName}</span>
+            <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-4 h-4 text-green-700" />
+            </div>
+
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-slate-900 truncate">
+                {fileName}
+              </p>
+
+              <p className="text-xs text-green-700 mt-0.5">
+                PDF selected successfully
+              </p>
+            </div>
           </>
         ) : (
           <>
-            <Upload className="w-4 h-4 shrink-0" />
-            <span>Choose PDF file</span>
+            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
+              <Upload className="w-4 h-4 text-blue-700" />
+            </div>
+
+            <div>
+              <p className="text-sm font-medium text-slate-700">
+                Choose PDF file
+              </p>
+
+              <p className="text-xs text-slate-500 mt-0.5">
+                Upload a PDF document
+              </p>
+            </div>
           </>
         )}
+
         <input
           type="file"
           accept="application/pdf"
+          required={required && !fileName}
           className="hidden"
-          onChange={(e) => onChange(e.target.files[0]?.name ?? "")}
+          onChange={(e) =>
+            onChange(e.target.files[0]?.name ?? "")
+          }
         />
       </label>
     </div>
   );
 }
 
-function TextField({ label, value, onChange, type = "text", required = true }) {
+function SectionHeader({ icon: Icon, title, description }) {
   return (
-    <div>
-      <label className="block text-xs font-medium text-ink-600 mb-1">
-        {label}
-      </label>
-      <input
-        type={type}
-        required={required}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full border border-border rounded-badge px-3 py-2 text-sm text-ink-900 focus:outline-none focus:border-navy-900"
-      />
+    <div className="flex items-start gap-3 mb-5">
+      <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
+        <Icon className="w-5 h-5 text-blue-700" />
+      </div>
+
+      <div>
+        <h2 className="text-base font-bold text-slate-900">
+          {title}
+        </h2>
+
+        <p className="mt-1 text-xs sm:text-sm text-slate-500">
+          {description}
+        </p>
+      </div>
     </div>
   );
 }
 
 export default function BuyerRegisterPage() {
   const navigate = useNavigate();
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -73,32 +214,118 @@ export default function BuyerRegisterPage() {
     city: "",
     officialWebsite: "",
     registrationProofFile: "",
+
     // B. Organization Authorization
     authorizationDocFile: "",
+
     // C. Official Details
     department: "",
     officialContact: "",
     officialEmail: "",
+
     // D. Authorized Signatory
     signatoryName: "",
     signatoryDesignation: "",
     signatoryEmail: "",
     signatoryPhone: "",
     signatoryDocFile: "",
+
     // Login credential
     password: "",
   });
 
   function update(field, value) {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+
+    setError("");
+  }
+
+  function validateForm() {
+    const requiredFields = [
+      ["organizationName", "Organization Name"],
+      ["organizationType", "Organization Type"],
+      ["registrationNumber", "Registration Number"],
+      ["registeredAddress", "Registered Address"],
+      ["state", "State"],
+      ["city", "City"],
+      ["registrationProofFile", "Organization Registration / Establishment Proof"],
+      ["authorizationDocFile", "Organization Authorization Document"],
+      ["department", "Department"],
+      ["officialContact", "Official Contact Number"],
+      ["officialEmail", "Official Email"],
+      ["signatoryName", "Authorized Signatory Name"],
+      ["signatoryDesignation", "Designation"],
+      ["signatoryEmail", "Signatory Official Email"],
+      ["signatoryPhone", "Signatory Official Phone"],
+      ["signatoryDocFile", "Authorized Signatory Authorization Document"],
+      ["password", "Password"],
+    ];
+
+    const missing = requiredFields
+      .filter(([field]) => {
+        const value = form[field];
+
+        return (
+          value === undefined ||
+          value === null ||
+          String(value).trim() === ""
+        );
+      })
+      .map(([, label]) => label);
+
+    if (missing.length > 0) {
+      setError(
+        `Please complete the required field${
+          missing.length > 1 ? "s" : ""
+        }: ${missing.join(", ")}`
+      );
+
+      return false;
+    }
+
+    if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        form.officialEmail.trim()
+      )
+    ) {
+      setError("Please enter a valid Official Email address.");
+      return false;
+    }
+
+    if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        form.signatoryEmail.trim()
+      )
+    ) {
+      setError("Please enter a valid Signatory Official Email address.");
+      return false;
+    }
+
+    if (form.password.trim().length < 6) {
+      setError("Password must contain at least 6 characters.");
+      return false;
+    }
+
+    return true;
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
+
     setError("");
+
+    if (!validateForm()) {
+      return;
+    }
+
     setLoading(true);
+
     try {
       const { user } = await registerBuyer(form);
+
       setCurrentUser(user);
       navigate("/buyer/dashboard");
     } catch (err) {
@@ -109,183 +336,379 @@ export default function BuyerRegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface">
-      <header className="border-b border-border bg-white">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-navy-900" />
-          <span className="text-sm font-semibold text-navy-900">
-            GeM Bid Compliance Verification Platform
-          </span>
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+
+      {/* HEADER */}
+      <header className="sticky top-0 z-50 h-[76px] bg-white border-b border-slate-200 shadow-sm">
+        <div className="max-w-7xl mx-auto h-full px-6 lg:px-10 flex items-center justify-between">
+
+          <button
+            type="button"
+            onClick={() => navigate("/")}
+            className="flex items-center"
+          >
+            <img
+              src="/bidsure logo.jpeg"
+              alt="BidSure AI"
+              className="h-14 w-auto object-contain"
+            />
+          </button>
+
+          <div className="hidden sm:flex items-center gap-2 text-sm text-slate-500">
+            <ShieldCheck className="w-4 h-4 text-blue-700" />
+            <span>Secure Registration</span>
+          </div>
+
         </div>
       </header>
 
-      <div className="max-w-2xl mx-auto px-6 py-12">
-        <h1 className="text-xl font-semibold text-ink-900">
-          Buyer Registration
-        </h1>
-        <p className="mt-1 text-sm text-ink-600">
-          Register your organization to create and publish tenders.
-        </p>
+      {/* PAGE */}
+      <main className="relative min-h-[calc(100vh-76px)] overflow-hidden">
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-8">
-          {/* A. Organization Registration */}
-          <section className="bg-surface-card border border-border rounded-card p-6 space-y-4">
-            <h2 className="text-sm font-semibold text-navy-900">
-              Organization Registration
-            </h2>
-            <TextField
-              label="Organization Name"
-              value={form.organizationName}
-              onChange={(v) => update("organizationName", v)}
-            />
-            <div>
-              <label className="block text-xs font-medium text-ink-600 mb-1">
-                Organization Type
-              </label>
-              <select
-                value={form.organizationType}
-                onChange={(e) => update("organizationType", e.target.value)}
-                className="w-full border border-border rounded-badge px-3 py-2 text-sm text-ink-900 focus:outline-none focus:border-navy-900"
-              >
-                {ORG_TYPES.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <TextField
-              label="Registration Number"
-              value={form.registrationNumber}
-              onChange={(v) => update("registrationNumber", v)}
-            />
-            <TextField
-              label="Registered Address"
-              value={form.registeredAddress}
-              onChange={(v) => update("registeredAddress", v)}
-            />
-            <div className="grid grid-cols-2 gap-4">
-              <TextField
-                label="State"
-                value={form.state}
-                onChange={(v) => update("state", v)}
-              />
-              <TextField
-                label="City"
-                value={form.city}
-                onChange={(v) => update("city", v)}
-              />
-            </div>
-            <TextField
-              label="Official Website"
-              value={form.officialWebsite}
-              onChange={(v) => update("officialWebsite", v)}
-              required={false}
-            />
-            <FileUploadField
-              label="Organization Registration / Establishment Proof"
-              fileName={form.registrationProofFile}
-              onChange={(v) => update("registrationProofFile", v)}
-            />
-          </section>
+        {/* Background decoration */}
+        <div className="absolute inset-0 pointer-events-none">
 
-          {/* B. Organization Authorization */}
-          <section className="bg-surface-card border border-border rounded-card p-6 space-y-4">
-            <h2 className="text-sm font-semibold text-navy-900">
-              Organization Authorization
-            </h2>
-            <FileUploadField
-              label="Organization Authorization Document"
-              fileName={form.authorizationDocFile}
-              onChange={(v) => update("authorizationDocFile", v)}
-            />
-          </section>
+          <div className="absolute -top-32 -left-32 w-[420px] h-[420px] rounded-full bg-blue-100/60 blur-3xl" />
 
-          {/* C. Official Details */}
-          <section className="bg-surface-card border border-border rounded-card p-6 space-y-4">
-            <h2 className="text-sm font-semibold text-navy-900">
-              Official Organization Details
-            </h2>
-            <TextField
-              label="Department"
-              value={form.department}
-              onChange={(v) => update("department", v)}
-            />
-            <TextField
-              label="Official Contact Number"
-              value={form.officialContact}
-              onChange={(v) => update("officialContact", v)}
-            />
-            <TextField
-              label="Official Email"
-              type="email"
-              value={form.officialEmail}
-              onChange={(v) => update("officialEmail", v)}
-            />
-          </section>
+          <div className="absolute top-20 -right-32 w-[500px] h-[500px] rounded-full bg-cyan-100/50 blur-3xl" />
 
-          {/* D. Authorized Signatory */}
-          <section className="bg-surface-card border border-border rounded-card p-6 space-y-4">
-            <h2 className="text-sm font-semibold text-navy-900">
-              Authorized Signatory Details
-            </h2>
-            <TextField
-              label="Authorized Signatory Name"
-              value={form.signatoryName}
-              onChange={(v) => update("signatoryName", v)}
-            />
-            <TextField
-              label="Designation"
-              value={form.signatoryDesignation}
-              onChange={(v) => update("signatoryDesignation", v)}
-            />
-            <TextField
-              label="Official Email"
-              type="email"
-              value={form.signatoryEmail}
-              onChange={(v) => update("signatoryEmail", v)}
-            />
-            <TextField
-              label="Official Phone"
-              value={form.signatoryPhone}
-              onChange={(v) => update("signatoryPhone", v)}
-            />
-            <FileUploadField
-              label="Authorized Signatory Authorization Document"
-              fileName={form.signatoryDocFile}
-              onChange={(v) => update("signatoryDocFile", v)}
-            />
-          </section>
+          <div className="absolute bottom-0 left-1/3 w-[500px] h-[220px] rounded-full bg-indigo-100/40 blur-3xl" />
 
-          {/* Login credential for the demo */}
-          <section className="bg-surface-card border border-border rounded-card p-6 space-y-4">
-            <h2 className="text-sm font-semibold text-navy-900">
-              Set a Password
-            </h2>
-            <TextField
-              label="Password"
-              type="password"
-              value={form.password}
-              onChange={(v) => update("password", v)}
-            />
-          </section>
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-r from-orange-100/50 via-white to-green-100/50" />
 
-          {error && (
-            <p className="text-sm text-status-red bg-status-red-bg px-3 py-2 rounded-badge">
-              {error}
+        </div>
+
+        {/* CONTENT */}
+        <div className="relative z-10 max-w-5xl mx-auto px-5 sm:px-6 lg:px-8 py-8 lg:py-10">
+
+          {/* PAGE HEADING */}
+          <div className="mb-8">
+
+            <p className="text-xs font-bold tracking-[0.16em] uppercase text-blue-700">
+              BidSure AI
             </p>
-          )}
 
-          <Button
-            type="submit"
-            variant="primary"
-            className="w-full"
-            disabled={loading}
+            <h1 className="mt-1 text-2xl sm:text-3xl font-bold text-slate-900">
+              Buyer Registration
+            </h1>
+
+            <p className="mt-2 text-sm sm:text-[15px] text-slate-600">
+              Register your organization to create and publish tenders.
+            </p>
+
+          </div>
+
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6"
           >
-            {loading ? "Submitting..." : "Complete Registration"}
-          </Button>
-        </form>
-      </div>
+
+            {/* ORGANIZATION REGISTRATION */}
+            <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 sm:p-7">
+
+              <SectionHeader
+                icon={Building2}
+                title="Organization Registration"
+                description="Provide the legal identity and registration details of your organization."
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <TextField
+                  label="Organization Name"
+                  value={form.organizationName}
+                  onChange={(v) =>
+                    update("organizationName", v)
+                  }
+                  placeholder="Enter organization name"
+                  required
+                />
+
+                <SelectField
+                  label="Organization Type"
+                  value={form.organizationType}
+                  onChange={(v) =>
+                    update("organizationType", v)
+                  }
+                  options={ORG_TYPES}
+                  required
+                />
+
+                <TextField
+                  label="Registration Number"
+                  value={form.registrationNumber}
+                  onChange={(v) =>
+                    update("registrationNumber", v)
+                  }
+                  placeholder="Enter registration number"
+                  required
+                />
+
+                <TextField
+                  label="Official Website"
+                  value={form.officialWebsite}
+                  onChange={(v) =>
+                    update("officialWebsite", v)
+                  }
+                  placeholder="https://example.gov.in"
+                  required={false}
+                />
+
+                <div className="md:col-span-2">
+                  <TextField
+                    label="Registered Address"
+                    value={form.registeredAddress}
+                    onChange={(v) =>
+                      update("registeredAddress", v)
+                    }
+                    placeholder="Enter complete registered address"
+                    required
+                  />
+                </div>
+
+                <TextField
+                  label="State"
+                  value={form.state}
+                  onChange={(v) =>
+                    update("state", v)
+                  }
+                  placeholder="Enter state"
+                  required
+                />
+
+                <TextField
+                  label="City"
+                  value={form.city}
+                  onChange={(v) =>
+                    update("city", v)
+                  }
+                  placeholder="Enter city"
+                  required
+                />
+
+              </div>
+
+              <div className="mt-6 pt-5 border-t border-slate-200">
+
+                <FileUploadField
+                  label="Organization Registration / Establishment Proof"
+                  fileName={form.registrationProofFile}
+                  onChange={(v) =>
+                    update("registrationProofFile", v)
+                  }
+                  required
+                />
+
+              </div>
+
+            </section>
+
+            {/* ORGANIZATION AUTHORIZATION */}
+            <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 sm:p-7">
+
+              <SectionHeader
+                icon={FileCheck2}
+                title="Organization Authorization"
+                description="Upload the document authorizing the organization to participate in procurement."
+              />
+
+              <FileUploadField
+                label="Organization Authorization Document"
+                fileName={form.authorizationDocFile}
+                onChange={(v) =>
+                  update("authorizationDocFile", v)
+                }
+                required
+              />
+
+            </section>
+
+            {/* OFFICIAL DETAILS */}
+            <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 sm:p-7">
+
+              <SectionHeader
+                icon={Building2}
+                title="Official Organization Details"
+                description="Provide the official department and contact information."
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <TextField
+                  label="Department"
+                  value={form.department}
+                  onChange={(v) =>
+                    update("department", v)
+                  }
+                  placeholder="Enter department"
+                  required
+                />
+
+                <TextField
+                  label="Official Contact Number"
+                  type="tel"
+                  value={form.officialContact}
+                  onChange={(v) =>
+                    update("officialContact", v)
+                  }
+                  placeholder="Enter official contact number"
+                  required
+                />
+
+                <TextField
+                  label="Official Email"
+                  type="email"
+                  value={form.officialEmail}
+                  onChange={(v) =>
+                    update("officialEmail", v)
+                  }
+                  placeholder="official@organization.gov.in"
+                  required
+                />
+
+              </div>
+
+            </section>
+
+            {/* AUTHORIZED SIGNATORY */}
+            <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 sm:p-7">
+
+              <SectionHeader
+                icon={UserCheck}
+                title="Authorized Signatory Details"
+                description="Provide details of the person authorized to sign and represent the organization."
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <TextField
+                  label="Authorized Signatory Name"
+                  value={form.signatoryName}
+                  onChange={(v) =>
+                    update("signatoryName", v)
+                  }
+                  placeholder="Enter full name"
+                  required
+                />
+
+                <TextField
+                  label="Designation"
+                  value={form.signatoryDesignation}
+                  onChange={(v) =>
+                    update("signatoryDesignation", v)
+                  }
+                  placeholder="e.g. Director, General Manager"
+                  required
+                />
+
+                <TextField
+                  label="Official Email"
+                  type="email"
+                  value={form.signatoryEmail}
+                  onChange={(v) =>
+                    update("signatoryEmail", v)
+                  }
+                  placeholder="name@organization.gov.in"
+                  required
+                />
+
+                <TextField
+                  label="Official Phone"
+                  type="tel"
+                  value={form.signatoryPhone}
+                  onChange={(v) =>
+                    update("signatoryPhone", v)
+                  }
+                  placeholder="Enter official phone number"
+                  required
+                />
+
+              </div>
+
+              <div className="mt-6 pt-5 border-t border-slate-200">
+
+                <FileUploadField
+                  label="Authorized Signatory Authorization Document"
+                  fileName={form.signatoryDocFile}
+                  onChange={(v) =>
+                    update("signatoryDocFile", v)
+                  }
+                  required
+                />
+
+              </div>
+
+            </section>
+
+            {/* PASSWORD */}
+            <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 sm:p-7">
+
+              <SectionHeader
+                icon={LockKeyhole}
+                title="Account Security"
+                description="Create a password for accessing your BidSure AI buyer account."
+              />
+
+              <div className="max-w-xl">
+
+                <TextField
+                  label="Password"
+                  type="password"
+                  value={form.password}
+                  onChange={(v) =>
+                    update("password", v)
+                  }
+                  placeholder="Create a secure password"
+                  required
+                />
+
+                <p className="mt-2 text-xs text-slate-500">
+                  Password must contain at least 6 characters.
+                </p>
+
+              </div>
+
+            </section>
+
+            {/* ERROR */}
+            {error && (
+              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+
+                <p className="text-sm font-medium text-red-700">
+                  {error}
+                </p>
+
+              </div>
+            )}
+
+            {/* SUBMIT */}
+            <div className="flex justify-end">
+
+              <Button
+                type="submit"
+                variant="primary"
+                className="min-w-[220px]"
+                disabled={loading}
+              >
+                {loading
+                  ? "Submitting..."
+                  : "Complete Registration"}
+              </Button>
+
+            </div>
+
+          </form>
+
+          {/* REASSURANCE */}
+          <div className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-500">
+            <ShieldCheck className="w-4 h-4 text-green-600" />
+            <span>
+              Your registration information is handled securely.
+            </span>
+          </div>
+
+        </div>
+      </main>
     </div>
   );
 }

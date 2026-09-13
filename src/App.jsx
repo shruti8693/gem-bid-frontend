@@ -19,12 +19,18 @@ import BidVerificationPage from "./pages/bidder/BidVerificationPage";
 import BidReportPage from "./pages/bidder/BidReportPage";
 import BidListPage from "./pages/officer/BidListPage";
 import BidReviewPage from "./pages/officer/BidReviewPage";
+import ComplianceXrayPage from "./pages/officer/ComplianceXrayPage";
 import RequestClarificationPage from "./pages/officer/RequestClarificationPage";
 import MyBidsPage from "./pages/bidder/MyBidsPage";
 import ClarificationResponsePage from "./pages/bidder/ClarificationResponsePage";
 import BidderNotificationsPage from "./pages/bidder/BidderNotificationsPage";
 import OfficerNotificationsPage from "./pages/officer/OfficerNotificationsPage";
 import BidComparisonPage from "./pages/officer/BidComparisonPage";
+import ComplianceReportsPage from "./pages/officer/ComplianceReportsPage";
+import BuyerEvaluationPage from "./pages/buyer/BuyerEvaluationPage";
+import BuyerBidReviewPage from "./pages/buyer/BuyerBidReviewPage";
+import TenderMonitoringPage from "./pages/buyer/TenderMonitoringPage";
+import BuyerNotificationsPage from "./pages/buyer/BuyerNotificationsPage";
 
 const BUILT_PATHS = [
   "/",
@@ -44,13 +50,19 @@ const BUILT_PATHS = [
   "/bidder/tenders/:id/verify",
   "/bidder/bids/:id/report",
   "/officer/bids",
-  "/officer/bids/:id",
+"/officer/bids/:id",
+"/officer/bids/:id/compliance-xray",
   "/officer/bids/:id/clarify",
+  "/officer/reports",
   "/bidder/bids",
   "/bidder/bids/:id/clarification",
   "/bidder/notifications",
   "/officer/notifications",
   "/officer/evaluation",
+  "/buyer/evaluation",
+"/buyer/bids/:id",
+"/buyer/tenders/:id",
+"/buyer/notifications",
 ];
 
 export default function App() {
@@ -68,18 +80,42 @@ export default function App() {
         <Route path="/officer/dashboard" element={<OfficerDashboardPage />} />
         <Route path="/buyer/tenders/create" element={<CreateTenderPage />} />
         <Route path="/buyer/tenders" element={<MyTendersPage />} />
+        <Route
+  path="/buyer/evaluation"
+  element={<BuyerEvaluationPage />}
+/>
+<Route
+  path="/buyer/bids/:id"
+  element={<BuyerBidReviewPage />}
+/>
+<Route
+  path="/buyer/tenders/:id"
+  element={<TenderMonitoringPage />}
+/>
+<Route
+  path="/buyer/notifications"
+  element={<BuyerNotificationsPage />}
+/>
         <Route path="/bidder/tenders" element={<AvailableTendersPage />} />
         <Route path="/bidder/tenders/:id" element={<TenderDetailsPage />} />
         <Route path="/bidder/tenders/:id/upload" element={<UploadMissingDocsPage />} />
         <Route path="/bidder/tenders/:id/verify" element={<BidVerificationPage />} />
         <Route path="/bidder/bids/:id/report" element={<BidReportPage />} />
         <Route path="/officer/bids" element={<BidListPage />} />
-        <Route path="/officer/bids/:id" element={<BidReviewPage />} />
-        <Route path="/officer/bids/:id/clarify" element={<RequestClarificationPage />} />
+<Route path="/officer/bids/:id" element={<BidReviewPage />} />
+<Route
+  path="/officer/bids/:id/compliance-xray"
+  element={<ComplianceXrayPage />}
+/>
+<Route path="/officer/bids/:id/clarify" element={<RequestClarificationPage />} />
         <Route path="/bidder/bids" element={<MyBidsPage />} />
         <Route path="/bidder/bids/:id/clarification" element={<ClarificationResponsePage />} />
         <Route path="/bidder/notifications" element={<BidderNotificationsPage />} />
         <Route path="/officer/notifications" element={<OfficerNotificationsPage />} />
+        <Route
+  path="/officer/reports"
+  element={<ComplianceReportsPage />}
+/>
         <Route path="/officer/evaluation" element={<BidComparisonPage />} />
         {routes
           .filter((route) => !BUILT_PATHS.includes(route.path))
