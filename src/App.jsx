@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import RoleSelectPage from "./pages/RoleSelectPage";
 import LoginPage from "./pages/LoginPage";
@@ -39,84 +39,195 @@ const BUILT_PATHS = [
   "/register/buyer",
   "/register/officer",
   "/register/bidder",
+
+  // Bidder
   "/bidder/dashboard",
-  "/buyer/dashboard",
-  "/officer/dashboard",
-  "/buyer/tenders/create",
-  "/buyer/tenders",
   "/bidder/tenders",
   "/bidder/tenders/:id",
   "/bidder/tenders/:id/upload",
   "/bidder/tenders/:id/verify",
-  "/bidder/bids/:id/report",
-  "/officer/bids",
-"/officer/bids/:id",
-"/officer/bids/:id/compliance-xray",
-  "/officer/bids/:id/clarify",
-  "/officer/reports",
   "/bidder/bids",
+  "/bidder/bids/:id/report",
   "/bidder/bids/:id/clarification",
   "/bidder/notifications",
-  "/officer/notifications",
-  "/officer/evaluation",
+
+  // Buyer
+  "/buyer/dashboard",
+  "/buyer/tenders/create",
+  "/buyer/tenders",
+  "/buyer/tenders/:id",
   "/buyer/evaluation",
-"/buyer/bids/:id",
-"/buyer/tenders/:id",
-"/buyer/notifications",
+  "/buyer/bids/:id",
+  "/buyer/notifications",
+
+  // Officer
+  "/officer/dashboard",
+  "/officer/bids",
+  "/officer/bids/:id",
+  "/officer/bids/:id/compliance-xray",
+  "/officer/bids/:id/clarify",
+  "/officer/reports",
+  "/officer/evaluation",
+  "/officer/notifications",
 ];
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
+        {/* General */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/register" element={<RoleSelectPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/register/buyer" element={<BuyerRegisterPage />} />
-        <Route path="/register/officer" element={<OfficerRegisterPage />} />
-        <Route path="/register/bidder" element={<BidderRegisterPage />} />
-        <Route path="/bidder/dashboard" element={<BidderDashboardPage />} />
-        <Route path="/buyer/dashboard" element={<BuyerDashboardPage />} />
-        <Route path="/officer/dashboard" element={<OfficerDashboardPage />} />
-        <Route path="/buyer/tenders/create" element={<CreateTenderPage />} />
-        <Route path="/buyer/tenders" element={<MyTendersPage />} />
+
+        {/* Registration */}
         <Route
-  path="/buyer/evaluation"
-  element={<BuyerEvaluationPage />}
-/>
-<Route
-  path="/buyer/bids/:id"
-  element={<BuyerBidReviewPage />}
-/>
-<Route
-  path="/buyer/tenders/:id"
-  element={<TenderMonitoringPage />}
-/>
-<Route
-  path="/buyer/notifications"
-  element={<BuyerNotificationsPage />}
-/>
-        <Route path="/bidder/tenders" element={<AvailableTendersPage />} />
-        <Route path="/bidder/tenders/:id" element={<TenderDetailsPage />} />
-        <Route path="/bidder/tenders/:id/upload" element={<UploadMissingDocsPage />} />
-        <Route path="/bidder/tenders/:id/verify" element={<BidVerificationPage />} />
-        <Route path="/bidder/bids/:id/report" element={<BidReportPage />} />
-        <Route path="/officer/bids" element={<BidListPage />} />
-<Route path="/officer/bids/:id" element={<BidReviewPage />} />
-<Route
-  path="/officer/bids/:id/compliance-xray"
-  element={<ComplianceXrayPage />}
-/>
-<Route path="/officer/bids/:id/clarify" element={<RequestClarificationPage />} />
-        <Route path="/bidder/bids" element={<MyBidsPage />} />
-        <Route path="/bidder/bids/:id/clarification" element={<ClarificationResponsePage />} />
-        <Route path="/bidder/notifications" element={<BidderNotificationsPage />} />
-        <Route path="/officer/notifications" element={<OfficerNotificationsPage />} />
+          path="/register/buyer"
+          element={<BuyerRegisterPage />}
+        />
         <Route
-  path="/officer/reports"
-  element={<ComplianceReportsPage />}
-/>
-        <Route path="/officer/evaluation" element={<BidComparisonPage />} />
+          path="/register/officer"
+          element={<OfficerRegisterPage />}
+        />
+        <Route
+          path="/register/bidder"
+          element={<BidderRegisterPage />}
+        />
+
+        {/* Bidder Dashboard */}
+        <Route
+          path="/bidder/dashboard"
+          element={<BidderDashboardPage />}
+        />
+
+        {/* Buyer Dashboard */}
+        <Route
+          path="/buyer/dashboard"
+          element={<BuyerDashboardPage />}
+        />
+
+        {/* Officer Dashboard */}
+        <Route
+          path="/officer/dashboard"
+          element={<OfficerDashboardPage />}
+        />
+
+        {/* Buyer - Tender Management */}
+        <Route
+          path="/buyer/tenders/create"
+          element={<CreateTenderPage />}
+        />
+
+        <Route
+          path="/buyer/tenders"
+          element={<MyTendersPage />}
+        />
+
+        <Route
+          path="/buyer/tenders/:id"
+          element={<TenderMonitoringPage />}
+        />
+
+        {/* Buyer - Evaluation */}
+        <Route
+          path="/buyer/evaluation"
+          element={<BuyerEvaluationPage />}
+        />
+
+        <Route
+          path="/buyer/bids/:id"
+          element={<BuyerBidReviewPage />}
+        />
+
+        {/* Buyer - Notifications */}
+        <Route
+          path="/buyer/notifications"
+          element={<BuyerNotificationsPage />}
+        />
+
+        {/* Bidder - Tenders */}
+        <Route
+          path="/bidder/tenders"
+          element={<AvailableTendersPage />}
+        />
+
+        <Route
+          path="/bidder/tenders/:id"
+          element={<TenderDetailsPage />}
+        />
+
+        <Route
+          path="/bidder/tenders/:id/upload"
+          element={<UploadMissingDocsPage />}
+        />
+
+        <Route
+          path="/bidder/tenders/:id/verify"
+          element={<BidVerificationPage />}
+        />
+
+        {/* Bidder - Bids */}
+        <Route
+          path="/bidder/bids"
+          element={<MyBidsPage />}
+        />
+
+        <Route
+          path="/bidder/bids/:id/report"
+          element={<BidReportPage />}
+        />
+
+        <Route
+          path="/bidder/bids/:id/clarification"
+          element={<ClarificationResponsePage />}
+        />
+
+        {/* Bidder - Notifications */}
+        <Route
+          path="/bidder/notifications"
+          element={<BidderNotificationsPage />}
+        />
+
+        {/* Officer - Bids */}
+        <Route
+          path="/officer/bids"
+          element={<BidListPage />}
+        />
+
+        <Route
+          path="/officer/bids/:id"
+          element={<BidReviewPage />}
+        />
+
+        <Route
+          path="/officer/bids/:id/compliance-xray"
+          element={<ComplianceXrayPage />}
+        />
+
+        <Route
+          path="/officer/bids/:id/clarify"
+          element={<RequestClarificationPage />}
+        />
+
+        {/* Officer - Reports */}
+        <Route
+          path="/officer/reports"
+          element={<ComplianceReportsPage />}
+        />
+
+        {/* Officer - Evaluation */}
+        <Route
+          path="/officer/evaluation"
+          element={<BidComparisonPage />}
+        />
+
+        {/* Officer - Notifications */}
+        <Route
+          path="/officer/notifications"
+          element={<OfficerNotificationsPage />}
+        />
+
+        {/* Placeholder Routes */}
         {routes
           .filter((route) => !BUILT_PATHS.includes(route.path))
           .map((route) => (
@@ -127,6 +238,6 @@ export default function App() {
             />
           ))}
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
