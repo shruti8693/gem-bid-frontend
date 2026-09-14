@@ -385,8 +385,8 @@ export default function BidComparisonPage() {
                   navigate(`/officer/bids/${bid.id}`)
                 }
                 onXray={() =>
-                  navigate(`/officer/bids/${bid.id}/xray`)
-                }
+  navigate(`/officer/bids/${bid.id}/compliance-xray`)
+}
               />
             ))}
           </div>
@@ -581,7 +581,7 @@ export default function BidComparisonPage() {
                           type="button"
                           onClick={() =>
                             navigate(
-                              `/officer/bids/${bid.id}/xray`
+                              `/officer/bids/${bid.id}/compliance-xray`
                             )
                           }
                           className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md bg-blue-50 text-blue-700 text-[10px] font-bold hover:bg-blue-100 transition-colors"
